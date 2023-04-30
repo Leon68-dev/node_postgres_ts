@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { createUserRpst, deleteUserRpst, getOneUserRpst, getUsersRpst, updateUserRpst } from "../repository/user.repository.js"
+import { createUserRpst, deleteUserRpst, getOneUserRpst, getUsersProcedureRpst, getUsersRpst, updateUserRpst } from "../repository/user.repository.js"
 
 export const createUserCtrl = async (req:Request, res:Response): Promise<void> => {
     try{
@@ -45,6 +45,15 @@ export const deleteUserCtrl = async (req:Request, res:Response): Promise<void> =
         const id = req.params.id;
         const user = await deleteUserRpst(Number(id));
         res.json(user);
+    } catch(e) {
+        res.status(500).json(e);
+    }
+}
+
+export const getUsersProcedureCtrl = async (req:Request, res:Response): Promise<void> => {
+    try {
+        const users = await getUsersProcedureRpst();    
+        res.json(users);
     } catch(e) {
         res.status(500).json(e);
     }
