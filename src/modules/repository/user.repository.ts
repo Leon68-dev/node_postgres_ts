@@ -25,7 +25,7 @@ export const getUsersRpst = async ():Promise<any[] | null> => {
         return users.rows;
     } catch(e) {
         await poolConnections.query(`ROLLBACK;`);
-        console.error('error', e);
+        console.error('get_person', e);
         return null;
     }
 }
