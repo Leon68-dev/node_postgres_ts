@@ -4,8 +4,8 @@ import { createUserRpst, deleteUserRpst, getOneUserRpst, getUsersRpst, updateUse
 export const createUserCtrl = async (req:Request, res:Response): Promise<void> => {
     try{
         const { name, surname } = req.body;
-        const newPerson = await createUserRpst(name, surname);
-        res.json(newPerson);
+        const newUser = await createUserRpst(name, surname);
+        res.json(newUser);
     } catch(e) {
         res.status(500).json(e);
     }

@@ -3,10 +3,7 @@ import poolConnections from "../config/database.js"
 export const createUserRpst = async (name: string, surname: string):Promise<any> => {
     try{
         //const newUser = await poolConnections.query(`INSERT INTO person(name, surname) values($1, $2) RETURNING *`, [name, surname]);
-        let res_is = 0;
-        const newUser = await poolConnections.query(`CALL public.insert_person($1, $2, $3)`, [name, surname, res_is]);
-        //console.log('newUser', newUser);
-        console.log('newUser.rows[0]', newUser.rows[0]);
+        const newUser = await poolConnections.query(`CALL public.insert_person($1, $2, $3)`, [name, surname, null]);
         return newUser?.rows[0];
     } catch(e) {
         await poolConnections.query(`ROLLBACK;`);
