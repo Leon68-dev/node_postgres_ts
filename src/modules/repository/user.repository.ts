@@ -16,7 +16,7 @@ export const getUsersRpst = async ():Promise<any[] | null> => {
     try {
         //const users = await poolConnections.query(`SELECT * FROM person`);
         await poolConnections.query(`BEGIN;`);
-        await poolConnections.query(`CALL public.get_person('result')`);
+        await poolConnections.query(`CALL public.get_persons('result')`);
         const users = await poolConnections.query(`FETCH ALL IN "result";`);
         await poolConnections.query(`COMMIT;`);
         return users.rows;
@@ -27,11 +27,17 @@ export const getUsersRpst = async ():Promise<any[] | null> => {
     }
 }
 
-export const getOneUserRpst = async (userId: number):Promise<any> => {
+export const getOneUserRpst = async (id: number):Promise<any> => {
     try{
-        const user = await poolConnections.query(`SELECT * FROM person where id = $1`, [userId]);
-        return user?.rows[0];
+        //const user = await poolConnections.query(`SELECT * FROM person where id = $1`, [id]);
+        await poolConnections.query(`BEGIN;`);
+        await poolConnections.query(`CALL public.get_person_by_id($1, 'result')`, [id]);
+        const user = await poolConnections.query(`FETCH ALL IN "result";`);
+        await poolConnections.query(`COMMIT;`);
+        return user?.rows[0] ?? [];
     } catch(e) {
+        await poolConnections.query(`ROLLBACK;`);
+        console.error('get_person_by_id', e);
         return null;
     }
 }
@@ -50,9 +56,12 @@ export const updateUserRpst = async (id: number, name: string, surname: string):
 
 export const deleteUserRpst = async (id: number):Promise<any> => {
     try{
-        const user = await poolConnections.query(`DELETE FROM person where id = $1`, [id]);
-        return(user?.rows[0]);
+        //const user = await poolConnections.query(`DELETE FROM person where id = $1`, [id]);
+        await poolConnections.query(`CALL public.delete_person($1)`, [id]);
+        return({});
     } catch(e) {
+        await poolConnections.query(`ROLLBACK;`);
+        console.error('delete_person', e);
         return null;
-    }
+   }
 }

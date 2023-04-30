@@ -43,8 +43,8 @@ export const  updateUserCtrl = async (req:Request, res:Response): Promise<void> 
 export const deleteUserCtrl = async (req:Request, res:Response): Promise<void> => {
     try{
         const id = req.params.id;
-        const user = await deleteUserRpst(Number(id));
-        res.json(user);
+        const res = await deleteUserRpst(Number(id));
+        res.json(res);
     } catch(e) {
         res.status(500).json(e);
     }
