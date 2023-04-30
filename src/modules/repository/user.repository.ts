@@ -50,14 +50,13 @@ export const deleteUserRpst = async (id: number):Promise<any> => {
 
 export const getUsersProcedureRpst = async ():Promise<any[] | null> => {
     try {
-        var refcursor = {};
         await poolConnections.query(`BEGIN;`);
         await poolConnections.query(`CALL public.get_person('result')`);
         const users = await poolConnections.query(`FETCH ALL IN "result";`);
         await poolConnections.query(`COMMIT;`);
         return users.rows;
     } catch(e) {
-        console.log('error', e);
+        console.error('error', e);
         return null;
     }
 }
